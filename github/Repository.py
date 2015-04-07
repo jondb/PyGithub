@@ -1629,7 +1629,7 @@ class Repository(github.GithubObject.CompletableGithubObject):
         )
         return github.PullRequest.PullRequest(self._requester, headers, data, completed=True)
 
-    def get_pulls(self, state=github.GithubObject.NotSet, sort=github.GithubObject.NotSet):
+    def get_pulls(self, state=github.GithubObject.NotSet, sort=github.GithubObject.NotSet, direction=github.GithubObject.NotSet):
         """
         :calls: `GET /repos/:owner/:repo/pulls <http://developer.github.com/v3/pulls>`_
         :param state: string
@@ -1637,11 +1637,15 @@ class Repository(github.GithubObject.CompletableGithubObject):
         """
         assert state is github.GithubObject.NotSet or isinstance(state, (str, unicode)), state
         assert sort is github.GithubObject.NotSet or isinstance(sort, (str, unicode)), sort
+        assert direction is github.GithubObject.NotSet or isinstance(direction, (str, unicode)), direction
+
         url_parameters = dict()
         if state is not github.GithubObject.NotSet:
             url_parameters["state"] = state
         if sort is not github.GithubObject.NotSet:
             url_parameters["sort"] = sort
+        if direction is not github.GithubObject.NotSet:
+            url_parameters["direction"] = direction
         return github.PaginatedList.PaginatedList(
             github.PullRequest.PullRequest,
             self._requester,
